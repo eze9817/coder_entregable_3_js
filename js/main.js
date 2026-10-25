@@ -34,6 +34,31 @@ function saludarAlumno(nombre) {
     return iniciar;
 }
 
+function mostrarMateria(materias) {
+    let mensaje = "Ingresa la materia que queres modificar:\n"
+
+    for (let i = 0; i < materias.length; i++) {
+        mensaje += i + "- " + materias[i] + "\n"
+    }
+
+    const posicion = Number(prompt(mensaje))
+
+    return posicion
+}
+
+function listarMaterias(materias) {
+    let mensaje = "Materias que seran evaludas:\n"
+
+    for (const materia of materias) {
+        mensaje += "- " + materia + "\n"
+    }
+
+    alert(mensaje)
+}
+
+const calcularPromedio = (sumaNotas, cantidadMaterias) => {
+    return sumaNotas / cantidadMaterias;
+}
 
 
 let nombre;
@@ -50,45 +75,99 @@ do {
 
 } while (nombreValido === false);
 
+
+
 const iniciar = saludarAlumno(nombre);
 
 if (iniciar === true) {
 
-const cantidadMaterias = 5;
-let sumaNotas = 0;
-let nota;
+    const materias = [
+        "Matematica",
+        "Literatura",
+        "Ciencias",
+        "Educacion Fisica",
+        "Inlges"
+    ]
 
-for (let i = 1; i <= cantidadMaterias; i++) {
+    const cambiarMateria = confirm("¿Deseas modificar las Materias antes de ingresar notas?")
 
-    if (i === 1) {
-        nota = validarNota("Matemática");
-    } else if (i === 2) {
-        nota = validarNota("Literatura");
-    } else if (i === 3) {
-        nota = validarNota("Ciencias");
-    } else if (i === 4) {
-        nota = validarNota("Educacion Fisica");
-    } else {
-        nota = validarNota("Ingles");
+    if (cambiarMateria === true) {
+
+        const reemplazarMateria = confirm("¿Deseas reemplazar una materia por otra?")
+
+        if (reemplazarMateria === true) {
+
+            const posicion = mostrarMateria(materias)
+
+            const nuevaMateria = prompt("Ingresa la nueva materia:")
+
+            if (posicion >= 0 && posicion < materias.length && !isNaN(posicion)) {
+
+                if (nuevaMateria === "" || nuevaMateria === null) {
+                    alert("debes ingresar una materia valida")
+
+                } else if (materias.includes(nuevaMateria)) {
+                    alert("la materia ingresada ya existe")
+
+                } else {
+                    materias.splice(posicion, 1, nuevaMateria)
+                    alert("la materia fue reemplazada correctamente")
+
+                }
+
+
+            } else {
+                alert("la posicion ingresada no es valida")
+            }
+
+
+        }
+
+
+        const agregarMateria = confirm("¿deseas agregar una materia?")
+
+        if (agregarMateria === true) {
+
+            const nuevaMateria = prompt("¿que materia deseas agregar?")
+
+            if (nuevaMateria === "" || nuevaMateria === null) {
+                alert("debes ingresar una materia valida")
+
+            } else if (materias.includes(nuevaMateria)) {
+                alert("esta materia ya existe")
+
+            } else {
+                materias.push(nuevaMateria)
+                alert("se agrego la materia: " + nuevaMateria)
+            }
+
+
+        }
+
     }
 
-    sumaNotas += nota;
-}
+    listarMaterias(materias)
 
-const calcularPromedio = (sumaNotas, cantidadMaterias) => {
-    return sumaNotas / cantidadMaterias;
-};
 
-const promedio = calcularPromedio(sumaNotas, cantidadMaterias);
+    let sumaNotas = 0;
 
-if (promedio >= 85) {
-    alert(nombre + ", tu promedio es: " + promedio + ". Estás aprobado, excelente.");
+    for (const materia of materias) {
+        const nota = validarNota(materia)
+        sumaNotas += nota
+    }
 
-} else if (promedio >= 60) {
-    alert(nombre + ", tu promedio es: " + promedio + ". Estás aprobado.");
+    const cantidadMaterias = materias.length
 
-} else {
-    alert(nombre + ", tu promedio es: " + promedio + ". Estás desaprobado, seguí mejorando.");
-}
+    const promedio = calcularPromedio(sumaNotas, cantidadMaterias)
+
+    if (promedio >= 85) {
+        alert(nombre + ", tu promedio es: " + promedio + ". Estás aprobado, excelente.");
+
+    } else if (promedio >= 60) {
+        alert(nombre + ", tu promedio es: " + promedio + ". Estás aprobado.");
+
+    } else {
+        alert(nombre + ", tu promedio es: " + promedio + ". Estás desaprobado, seguí mejorando.");
+    }
 
 }
